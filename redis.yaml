@@ -25,7 +25,7 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom: 
                 secretKeyRef:
-                  name: redis-secrets-prod
+                  name: redis-secrets-sam
                   key: REDIS_PASSWORD
           volumeMounts:
             - name: redis-sam-volume
