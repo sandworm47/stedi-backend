@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: redis-stedi-sam
+  name: redis-stedi-owen
 spec:
   selector:
     matchLabels:
-      app: redis-stedi-sam
-  serviceName: redis-stedi-sam
+      app: redis-stedi-owen
+  serviceName: redis-stedi-owen
   replicas: 1
   template:
     metadata:
       labels:
-        app: redis-stedi-sam
+        app: redis-stedi-owen
     spec: 
       containers:
-        - name: redis-stedi-sam
+        - name: redis-stedi-owen
           image: redis:7.0.5-alpine
           imagePullPolicy: Always
           args: ["--requirepass", "$(REDIS_PASSWORD)", "--appendonly", "yes", "--save", "900", "1", "--save", "30", "2"]
@@ -25,15 +25,15 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom: 
                 secretKeyRef:
-                  name: redis-secrets-sam
+                  name: redis-secrets-owen
                   key: REDIS_PASSWORD
           volumeMounts:
-            - name: redis-sam-volume
+            - name: redis-owen-volume
               mountPath: /data
       restartPolicy: Always
   volumeClaimTemplates:
     - metadata:
-        name: redis-sam-volume
+        name: redis-owen-volume
       spec:
         accessModes:
           - ReadWriteOnce
@@ -44,11 +44,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-stedi-sam
+  name: redis-stedi-owen
 spec:
   ports:
     - port: 6379
       name: redis
   clusterIP: None
   selector:
-    app: redis-stedi-sam
+    app: redis-stedi-owen

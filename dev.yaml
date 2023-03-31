@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment 
 metadata:
-  name: stedi-sam-dev
+  name: stedi-owen-dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: stedi-sam-dev
+      app: stedi-owen-dev
   template:
     metadata:
       labels:
-        app: stedi-sam-dev
+        app: stedi-owen-dev
     spec:
       containers:
-        - name: stedi-sam-dev
-          image: gcr.io/cheese-empanadas/sam-stedi-api
+        - name: stedi-owen-dev
+          image: gcr.io/cheese-empanadas-owen-stedi-api
           env:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: redis-secrets-sam
+                  name: redis-secrets-owen
                   key: REDIS_PASSWORD
             - name: REDIS_HOST
               value: "redis-stedi-prod"
@@ -48,10 +48,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: stedi-sam-nodeport
+  name: stedi-owen-nodeport
 spec:
   selector:
-    app: stedi-sam-dev
+    app: stedi-owen-dev
   type: NodePort
   ports:
   - port: 80
@@ -60,18 +60,18 @@ spec:
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: stedi-sam-certificate
+  name: stedi-owen-certificate
 spec:
   domains:
-    - sam.cit262.com
+    - owen.cit262.com
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: stedi-sam-ingress
+  name: stedi-owen-ingress
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: stedi-sam-public
-    networking.gke.io/managed-certificates: stedi-sam-certificate
+    kubernetes.io/ingress.global-static-ip-name: owen.cit262.com
+    networking.gke.io/managed-certificates: stedi-owen-certificate
 spec:
   rules:
   - http:
@@ -80,6 +80,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: stedi-sam-nodeport
+            name: stedi-owen-nodeport
             port:
               number: 80
