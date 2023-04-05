@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: stedi-owen-dev
-          image: gcr.io/cheese-empanadas-owen-stedi-api
+          image: gcr.io/cheese-empanadas/owen-stedi-api
           env:
             - name: REDIS_PASSWORD
               valueFrom:
